@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.esempla.task.service.ActivationExpiredException;
 import com.esempla.task.service.FileNotFoundException;
+import com.esempla.task.service.UserReservationNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -190,6 +191,17 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
         return create(ex,problem, request);
 
+    }
+
+    @ExceptionHandler(UserReservationNotFoundException.class)
+    public  ResponseEntity<Problem> handleUserReservationNotFoundException(UserReservationNotFoundException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.NOT_FOUND)
+            .with(MESSAGE_KEY,ErrorConstants.ERR_FILE_NOT_FOUND)
+            .withTitle(ex.getMessage())
+            .build();
+
+        return create(ex,problem, request);
     }
 
     @Override

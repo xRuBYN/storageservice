@@ -12,10 +12,10 @@ import java.security.NoSuchAlgorithmException;
 
 public interface StorageService {
 
-    UserReservationResponse uploadFile(MultipartFile multipartFile) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
+    void uploadFile(String fileName, InputStream inputStream, Long size) throws Exception;
 
-    InputStream downloadFile(FileRequest fileRequest);
+    InputStream downloadFile(String name);
 
-    void deleteFile(FileRequest fileRequest) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
+    void deleteFile(String name) throws Exception;
 
 }
