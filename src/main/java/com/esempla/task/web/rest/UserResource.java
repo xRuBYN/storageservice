@@ -5,7 +5,7 @@ import com.esempla.task.domain.User;
 import com.esempla.task.repository.UserRepository;
 import com.esempla.task.security.AuthoritiesConstants;
 import com.esempla.task.service.MailService;
-import com.esempla.task.service.UserService;
+import com.esempla.task.service.SecurityUtils;
 import com.esempla.task.service.dto.AdminUserDTO;
 import com.esempla.task.web.rest.errors.BadRequestAlertException;
 import com.esempla.task.web.rest.errors.EmailAlreadyUsedException;
@@ -81,13 +81,13 @@ public class UserResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final UserService userService;
+    private final SecurityUtils userService;
 
     private final UserRepository userRepository;
 
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    public UserResource(SecurityUtils userService, UserRepository userRepository, MailService mailService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;

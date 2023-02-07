@@ -6,7 +6,6 @@ import com.esempla.task.domain.User;
 import com.esempla.task.repository.AuthorityRepository;
 import com.esempla.task.repository.UserRepository;
 import com.esempla.task.security.AuthoritiesConstants;
-import com.esempla.task.security.SecurityUtils;
 import com.esempla.task.service.dto.AdminUserDTO;
 import com.esempla.task.service.dto.UserDTO;
 import java.time.Instant;
@@ -28,9 +27,9 @@ import tech.jhipster.security.RandomUtil;
  */
 @Service
 @Transactional
-public class UserService {
+public class SecurityUtils {
 
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
 
     private final UserRepository userRepository;
 
@@ -38,7 +37,7 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public SecurityUtils(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
@@ -220,7 +219,7 @@ public class UserService {
      * @param imageUrl  image URL of user.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils
+        com.esempla.task.security.SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -237,7 +236,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils
+        com.esempla.task.security.SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -268,7 +267,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return com.esempla.task.security.SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
     /**

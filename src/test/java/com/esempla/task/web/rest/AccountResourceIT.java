@@ -11,10 +11,9 @@ import com.esempla.task.domain.User;
 import com.esempla.task.repository.AuthorityRepository;
 import com.esempla.task.repository.UserRepository;
 import com.esempla.task.security.AuthoritiesConstants;
-import com.esempla.task.service.UserService;
+import com.esempla.task.service.SecurityUtils;
 import com.esempla.task.service.dto.AdminUserDTO;
 import com.esempla.task.service.dto.PasswordChangeDTO;
-import com.esempla.task.service.dto.UserDTO;
 import com.esempla.task.web.rest.vm.KeyAndPasswordVM;
 import com.esempla.task.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
@@ -46,7 +45,7 @@ class AccountResourceIT {
     private AuthorityRepository authorityRepository;
 
     @Autowired
-    private UserService userService;
+    private SecurityUtils userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

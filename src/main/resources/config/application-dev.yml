@@ -32,7 +32,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/fileservice
+    url: jdbc:postgresql://localhost:5433/fileservice
     username: postgres
     password: loser221
     hikari:
@@ -91,6 +91,14 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
+
+
+minio:
+  endPoint: "http://127.0.0.1:9000"
+  accessKey: "myaccesskey"
+  secretKey: "mysecretkey"
+  bucketName: "filestorageesepmpla"
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

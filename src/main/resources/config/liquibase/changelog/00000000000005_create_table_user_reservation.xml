@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+    <changeSet id="00000000000005" author="jhipster">
+        <createTable tableName="user_reservation">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="total_size" type="int8"/>
+            <column name="used_size" type="int8"/>
+
+            <column name="user_id" type="bigint"/>
+
+            <column name="activated" type="boolean"/>
+            <column name="created_by" type="varchar(50)"/>
+            <column name="created_date" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_reservation"
+                                 constraintName="fk_user_reservation"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addDefaultValue  columnDataType="boolean"
+                          columnName="activated"
+                          defaultValueBoolean="false"
+                          schemaName="public"
+                          tableName="user_reservation"/>
+
+        <addDefaultValue  columnDataType="int8"
+                          columnName="used_size"
+                          defaultValueNumeric="0"
+                          schemaName="public"
+                          tableName="user_reservation"/>
+
+        <addUniqueConstraint tableName="user_reservation"
+                             columnNames="user_id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

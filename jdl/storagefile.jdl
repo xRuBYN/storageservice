@@ -1,0 +1,11 @@
+entity StorageFile {
+    id Long
+    name String
+    size Integer
+
+
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

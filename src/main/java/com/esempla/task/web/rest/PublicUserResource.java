@@ -1,6 +1,6 @@
 package com.esempla.task.web.rest;
 
-import com.esempla.task.service.UserService;
+import com.esempla.task.service.SecurityUtils;
 import com.esempla.task.service.dto.UserDTO;
 import java.util.*;
 import java.util.Collections;
@@ -26,9 +26,9 @@ public class PublicUserResource {
 
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
-    private final UserService userService;
+    private final SecurityUtils userService;
 
-    public PublicUserResource(UserService userService) {
+    public PublicUserResource(SecurityUtils userService) {
         this.userService = userService;
     }
 

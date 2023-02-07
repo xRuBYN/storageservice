@@ -2,9 +2,8 @@ package com.esempla.task.web.rest;
 
 import com.esempla.task.domain.User;
 import com.esempla.task.repository.UserRepository;
-import com.esempla.task.security.SecurityUtils;
 import com.esempla.task.service.MailService;
-import com.esempla.task.service.UserService;
+import com.esempla.task.service.SecurityUtils;
 import com.esempla.task.service.dto.AdminUserDTO;
 import com.esempla.task.service.dto.PasswordChangeDTO;
 import com.esempla.task.web.rest.errors.*;
@@ -37,11 +36,11 @@ public class AccountResource {
 
     private final UserRepository userRepository;
 
-    private final UserService userService;
+    private final SecurityUtils userService;
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, SecurityUtils userService, MailService mailService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -114,7 +113,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
-        String userLogin = SecurityUtils
+        String userLogin = com.esempla.task.security.SecurityUtils
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());

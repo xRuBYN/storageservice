@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+
+import com.esempla.task.service.ActivationExpiredException;
+import com.esempla.task.service.FileNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -162,6 +165,31 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
         Problem problem = Problem.builder().withStatus(Status.CONFLICT).with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE).build();
         return create(ex, problem, request);
+    }
+
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public  ResponseEntity<Problem> handleFileNotFoundException(FileNotFoundException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.NOT_FOUND)
+            .with(MESSAGE_KEY,ErrorConstants.ERR_FILE_NOT_FOUND)
+            .withTitle(ex.getMessage())
+            .build();
+
+        return create(ex,problem, request);
+
+    }
+
+    @ExceptionHandler(ActivationExpiredException.class)
+    public  ResponseEntity<Problem> handleActivationExpired(ActivationExpiredException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.INSUFFICIENT_STORAGE)
+            .with(MESSAGE_KEY,ErrorConstants.ERR_INACTIVE_STATUS)
+            .withTitle(ex.getMessage())
+            .build();
+
+        return create(ex,problem, request);
+
     }
 
     @Override

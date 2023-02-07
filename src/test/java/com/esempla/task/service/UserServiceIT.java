@@ -4,10 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.esempla.task.IntegrationTest;
-import com.esempla.task.config.Constants;
 import com.esempla.task.domain.User;
 import com.esempla.task.repository.UserRepository;
-import com.esempla.task.service.dto.AdminUserDTO;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -20,13 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
 
 /**
- * Integration tests for {@link UserService}.
+ * Integration tests for {@link SecurityUtils}.
  */
 @IntegrationTest
 @Transactional
@@ -48,7 +45,7 @@ class UserServiceIT {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private SecurityUtils userService;
 
     @Autowired
     private AuditingHandler auditingHandler;
