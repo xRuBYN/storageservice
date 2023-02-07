@@ -9,7 +9,6 @@ import com.esempla.task.service.dto.StorageFileResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class StorageFileService {
     private final StorageFileRepository storageFileRepository;
-
     private final UserReservationRepository userReservationRepository;
     private final UserRepository userRepository;
     private final StorageService storageService;
