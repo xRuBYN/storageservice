@@ -115,6 +115,7 @@ public class StorageFile {
 
     public StorageFileResponse toStorageFileResponse(){
         StorageFileResponse storageFileResponse = new StorageFileResponse();
+        storageFileResponse.setId(this.id);
         storageFileResponse.setCreatedBy(this.createdBy);
         storageFileResponse.setName(this.name);
         storageFileResponse.setPath(this.path);

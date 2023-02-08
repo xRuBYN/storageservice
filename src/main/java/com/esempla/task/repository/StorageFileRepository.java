@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface StorageFileRepository extends JpaRepository<StorageFile, Long> {
-    StorageFile findStorageFileByNameAndMimeType(String name, String mimeType);
 
     List<StorageFile> findAllByCreatedBy(String createdBy);
 
+    StorageFile findStorageFileById(Long id);
 }
