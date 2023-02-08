@@ -61,7 +61,7 @@ public class StorageFileService {
             if (storageFileServiceUtils.checkUsedSize(multipartFile.getSize())) {
 
                 String path = storageFileServiceUtils
-                    .generateUniqPath(multipartFile.getOriginalFilename(), userLogin);
+                    .generateUniqPath(userLogin);
 
                 storageService
                     .uploadFile(path, multipartFile.getInputStream(), multipartFile.getSize());
@@ -93,7 +93,7 @@ public class StorageFileService {
                 .findStorageFileById(id);
 
             if (Objects.isNull(storageFile)) {
-                throw new FileNotFoundException("File don't exist with type and name");
+                throw new FileNotFoundException("File don't exist with id " + id);
             }
             return storageService.downloadFile(storageFile.getPath());
         }
