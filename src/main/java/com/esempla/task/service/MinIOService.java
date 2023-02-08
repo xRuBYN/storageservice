@@ -36,12 +36,12 @@ public class MinIOService implements StorageService{
 
     }
 
-    public InputStream downloadFile(String name) {
+    public InputStream downloadFile(String path) {
         InputStream stream;
         try {
             stream = minioClient.getObject(GetObjectArgs.builder()
                 .bucket(minioProperties.getBucketName())
-                .object(name)
+                .object(path)
                 .build());
         } catch (Exception e) {
             log.debug("Happened error when get list objects from minio: " + e);
@@ -50,14 +50,14 @@ public class MinIOService implements StorageService{
         return stream;
     }
 
-    public void deleteFile(String name) throws Exception {
+    public void deleteFile(String path) throws Exception {
 
         RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
             .bucket(minioProperties.getBucketName())
-            .object(name)
+            .object(path)
             .build();
         minioClient.removeObject(removeObjectArgs);
-        log.debug("Object " + name + " removed.");
+        log.debug("Object " + path + " removed.");
 
     }
 

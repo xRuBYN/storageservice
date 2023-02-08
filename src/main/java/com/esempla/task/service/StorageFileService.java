@@ -6,12 +6,14 @@ import com.esempla.task.repository.StorageFileRepository;
 import com.esempla.task.repository.UserRepository;
 import com.esempla.task.repository.UserReservationRepository;
 import com.esempla.task.service.dto.StorageFileResponse;
+import com.esempla.task.utils.StorageFileServiceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,11 +23,14 @@ public class StorageFileService {
     private final UserRepository userRepository;
     private final StorageService storageService;
 
-    public StorageFileService(StorageFileRepository storageFileRepository, UserReservationRepository userReservationRepository, UserRepository userRepository, StorageService storageService) {
+    private final StorageFileServiceUtils storageFileServiceUtils;
+
+    public StorageFileService(StorageFileRepository storageFileRepository, UserReservationRepository userReservationRepository, UserRepository userRepository, StorageService storageService, StorageFileServiceUtils storageFileServiceUtils) {
         this.storageFileRepository = storageFileRepository;
         this.userReservationRepository = userReservationRepository;
         this.userRepository = userRepository;
         this.storageService = storageService;
+        this.storageFileServiceUtils = storageFileServiceUtils;
     }
 
     public void saveFile(StorageFile storageFile) {
@@ -45,28 +50,35 @@ public class StorageFileService {
 
     public void uploadFile(MultipartFile multipartFile) throws Exception {
         StorageFile storageFile = new StorageFile();
+
+        String userLogin = com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow();
+
         UserReservation userReservation = userReservationRepository
-            .findUserReservationByUser(userRepository.findOneByLogin(com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow()).orElseThrow());
+            .findUserReservationByUser(userRepository.findOneByLogin(userLogin).orElseThrow());
 
-        if (checkActivation()) {
+        if (storageFileServiceUtils.checkActivation()) {
 
-            if (checkUsedSize((int) multipartFile.getSize())) {
+            if (storageFileServiceUtils.checkUsedSize(multipartFile.getSize())) {
 
-                storageService.uploadFile(multipartFile.getOriginalFilename(), multipartFile.getInputStream(), multipartFile.getSize());
+                String path = storageFileServiceUtils
+                    .generateUniqPath(multipartFile.getOriginalFilename(), userLogin);
+
+                storageService
+                    .uploadFile(path, multipartFile.getInputStream(), multipartFile.getSize());
 
                 storageFile.setName(multipartFile.getOriginalFilename());
-                storageFile.setPath(multipartFile.getOriginalFilename());
+                storageFile.setPath(path);
                 storageFile.setSize(multipartFile.getSize());
                 storageFile.setMimeType(multipartFile.getContentType());
                 storageFile.setCreatedDate(Instant.now());
-                storageFile.setCreatedBy(com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow());
+                storageFile.setCreatedBy(userLogin);
 
                 saveFile(storageFile);
 
                 userReservation.setUsedSize((userReservation.getUsedSize() + multipartFile.getSize()));
 
             } else {
-                userReservation.setActivated(false);
+                throw new StorageSizeException();
             }
         } else {
             throw new ActivationExpiredException("You can't upload a file because your status is inactive");
@@ -75,30 +87,30 @@ public class StorageFileService {
 
     }
 
-    public InputStream downloadFile(String name) {
-        if (checkActivation()) {
+    public InputStream downloadFile(Long id) {
+        if (storageFileServiceUtils.checkActivation()) {
             StorageFile storageFile = storageFileRepository
-                .findStorageFileByName(name);
+                .findStorageFileById(id);
 
-            if (storageFile == null) {
+            if (Objects.isNull(storageFile)) {
                 throw new FileNotFoundException("File don't exist with type and name");
             }
-            return storageService.downloadFile(name);
+            return storageService.downloadFile(storageFile.getPath());
         }
 
         throw new ActivationExpiredException("You download delete a file because your status is inactive");
     }
 
-    public void deleteFile(String name) throws Exception {
+    public void deleteFile(Long id) throws Exception {
         UserReservation userReservation = userReservationRepository
             .findUserReservationByUser(userRepository.findOneByLogin(com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow()).orElseThrow());
 
         StorageFile storageFile = storageFileRepository
-            .findStorageFileByName(name);
-        if(checkActivation()) {
-            if (storageFile != null) {
+            .findStorageFileById(id);
+        if(storageFileServiceUtils.checkActivation()) {
+            if (Objects.nonNull(storageFile)) {
 
-                storageService.deleteFile(name);
+                storageService.deleteFile(storageFile.getPath());
 
                 userReservation.setUsedSize((userReservation.getUsedSize() - storageFile.getSize()));
                 storageFileRepository.delete(storageFile);
@@ -112,22 +124,4 @@ public class StorageFileService {
 
     }
 
-
-
-
-    private boolean checkActivation() {
-        UserReservation userReservation = userReservationRepository
-            .findUserReservationByUser(userRepository.findOneByLogin(com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow()).orElseThrow());
-        return userReservation.isActivated();
-    }
-
-    private boolean checkUsedSize(Integer size) {
-        UserReservation userReservation = userReservationRepository
-            .findUserReservationByUser(userRepository.findOneByLogin(com.esempla.task.security.SecurityUtils.getCurrentUserLogin().orElseThrow()).orElseThrow());
-
-        if (userReservation.getTotalSize() >= userReservation.getUsedSize() + size) {
-            return true;
-        }
-        return false;
-    }
 }

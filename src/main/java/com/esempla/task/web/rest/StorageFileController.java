@@ -4,13 +4,11 @@ import com.esempla.task.service.StorageFileService;
 import com.esempla.task.service.dto.FileRequest;
 import com.esempla.task.service.dto.StorageFileResponse;
 import org.apache.commons.compress.utils.IOUtils;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -29,15 +27,15 @@ public class StorageFileController {
     }
 
 
-    @GetMapping(value = "/download")
-    public ResponseEntity<byte[]> getFile(@RequestBody FileRequest fileRequest) throws IOException {
+    @GetMapping(value = "/download/{id}")
+    public ResponseEntity<byte[]> getFile(@PathVariable Long id) throws IOException {
         return ResponseEntity.ok()
-                .body(IOUtils.toByteArray(storageFileService.downloadFile(fileRequest.getFileName())));
+                .body(IOUtils.toByteArray(storageFileService.downloadFile(id)));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteFile(@RequestBody FileRequest fileRequest) throws Exception {
-        storageFileService.deleteFile(fileRequest.getFileName());
+    @DeleteMapping("/delete/{id}")
+    public void deleteFile(@PathVariable Long id) throws Exception {
+        storageFileService.deleteFile(id);
     }
 
 

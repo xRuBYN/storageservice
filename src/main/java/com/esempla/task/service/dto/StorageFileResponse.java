@@ -4,12 +4,21 @@ import java.time.Instant;
 
 public class StorageFileResponse {
 
+    private Long id;
     private String name;
     private Long size;
     private String mimeType;
     private String path;
     private String createdBy;
     private Instant createdDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
