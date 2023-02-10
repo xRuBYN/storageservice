@@ -10,6 +10,8 @@ public final class ErrorConstants {
 
     public static final String ERR_FILE_NOT_FOUND = "File Not Found";
 
+    public static final String UNEXISTING_FILE_TYPE = "UNEXISTING FILE TYPE";
+
     public static final String ERR_NO_SUFFICIENT_STORAGE = "No sufficient storage.";
     public static final String ERR_INACTIVE_STATUS = "Status is inactive";
     public static final String ERR_VALIDATION = "error.validation";
