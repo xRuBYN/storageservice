@@ -1,5 +1,6 @@
 package com.esempla.task.domain;
 
+import com.esempla.task.client.generate.StorageFileGenerate;
 import com.esempla.task.service.dto.StorageFileResponse;
 
 import javax.persistence.*;
@@ -123,5 +124,17 @@ public class StorageFile {
         storageFileResponse.setMimeType(this.mimeType);
         storageFileResponse.setCreatedDate(this.createdDate);
         return storageFileResponse;
+    }
+
+    public StorageFileGenerate toStorageFileGenerate() {
+        StorageFileGenerate storageFileGenerate = new StorageFileGenerate();
+        storageFileGenerate.setId(this.id);
+        storageFileGenerate.setCreatedBy(this.createdBy);
+        storageFileGenerate.setName(this.name);
+        storageFileGenerate.setPath(this.path);
+        storageFileGenerate.setSize(this.size);
+        storageFileGenerate.setMimeType(this.mimeType);
+//        storageFileGenerate.setCreatedDate((XMLGregorianCalendar) this.createdDate);
+        return storageFileGenerate;
     }
 }
