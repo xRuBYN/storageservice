@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/fileservice
-    username: fileservice
-    password:
+    url: jdbc:postgresql://localhost:5433/fileservice
+    username: postgres
+    password: loser221
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -120,3 +120,8 @@ jhipster:
 # ===================================================================
 
 # application:
+minio:
+  endPoint: "http://minio-service:9000"
+  accessKey: "myaccesskey"
+  secretKey: "mysecretkey"
+  bucketName: "filestorageesepmpla"

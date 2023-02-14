@@ -10,10 +10,13 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://fileservice-postgresql:5432/fileservice
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://fileservice-postgresql:5432/fileservice
       - JHIPSTER_SLEEP=5
-      - MINIO_ENDPOINT=minio-service:9000
-      - MINIO_ACCESSKEY=myaccesskey
-      - MINIO_SECRETKEY=mysecretkey
-      - MINIO_BUCKETNAME=filestorageesepmpla
+#      - MINIO_ENDPOINT=minio-service:9000
+      - MINIO_ACCESS_KEY=myaccesskey
+      - MINIO_SECRET_KEY=mysecretkey
+      - MINIO_BUCKET_NAME=filestorageesepmpla
+#      - MINIO_ACCESSKEY=myaccesskey
+#      - MINIO_SECRETKEY=mysecretkey
+#      - MINIO_BUCKETNAME=filestorageesepmpla
       # gives time for other services to boot before the application
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
@@ -27,25 +30,26 @@ services:
     # volumes:
     #   - ~/volumes/jhipster/fileservice/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=fileservice
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=fileservice
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 3200:5432
+      - "3200:5432"
 
   minio-service:
     image: quay.io/minio/minio
 
     environment:
-      - MINIO_ROOT_USER=minio99
-      - MINIO_ROOT_PASSWORD=minio123
       - MINIO_ACCESS_KEY=myaccesskey
       - MINIO_SECRET_KEY=mysecretkey
-      - MINIO_BUCKET=filestorageesepmpla
+      - MINIO_BUCKET_NAME=filestorageesepmpla
+    volumes:
+      - ./data/minio-persistence:/data
+      - ./data/minio-persistence/certs:/certs
     ports:
-      - 9000:9000
-      - 9001:9001
+      - "9000:9000"
+      - "9001:9001"
     command: server /data --console-address ":9001"

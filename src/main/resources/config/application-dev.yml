@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/fileservice
+    url: jdbc:postgresql://localhost:5433/fileservice
     username: postgres
-    password:
+    password: loser221
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -54,7 +54,7 @@ spring:
     cache: false
 
 server:
-  port: 8080
+  port: 8081
 
 # ===================================================================
 # JHipster specific properties
@@ -94,7 +94,7 @@ jhipster:
 
 
 minio:
-  endPoint: "http://127.0.0.1:9000"
+  endPoint: "http://minio-service:9000"
   accessKey: "myaccesskey"
   secretKey: "mysecretkey"
   bucketName: "filestorageesepmpla"
